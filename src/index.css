@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+@theme {
+  /* ألوان الباليتة الجديدة - بأجواء ترابية دافئة */
+  --color-brand-dark: #2c3639; /* الخلفية الأساسية للموقع */
+  --color-brand-blue: #3f4e4f; /* خلفية الكروت والأقسام */
+  --color-brand-teal: #a27b5c; /* الأزرار والأيقونات والحدود */
+  --color-brand-cream: #dcd7c9; /* النصوص والعناوين */
+
+  /* تحديث الظلال لتتناسب مع الدرجات الجديدة */
+  --shadow-brand: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  --shadow-brand-sm: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* 1. إعدادات الـ Root والأبعاد */
+:root {
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: dark;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: start;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--color-brand-dark);
+  color: var(--color-brand-cream);
+}
+
+/* 2. الكلاسات المخصصة للمكونات */
+@layer components {
+  .target {
+    @apply text-brand-dark bg-brand-cream inline-flex items-center gap-2 rounded-md px-8 py-3 font-semibold transition-all duration-300;
+    @apply hover:bg-brand-teal hover:text-brand-dark hover:ring-brand-teal hover:ring hover:outline-none;
+    @apply hover:scale-105 sm:hover:w-60;
+  }
+
+  .section-title {
+    @apply text-brand-cream mb-12 text-center text-4xl font-bold md:text-5xl;
+  }
+
+  .card-luxury {
+    @apply bg-brand-blue hover:shadow-brand border-brand-teal/30 hover:border-brand-teal rounded-xl border p-6 shadow-sm transition-all duration-300;
+  }
+
+  .btn-primary {
+    @apply bg-brand-teal text-brand-dark hover:bg-brand-cream rounded-md px-6 py-2 font-semibold transition-all;
+  }
+
+  .gradient-text {
+    @apply from-brand-cream to-brand-teal bg-linear-to-r bg-clip-text text-transparent;
+  }
+}
+
+/* 3. الأنيميشن */
+.animate-slide-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-slide-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.animate-fade-in {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.animate-fade-in.visible {
+  opacity: 1;
+}
