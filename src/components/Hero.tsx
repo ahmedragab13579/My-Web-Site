@@ -3,7 +3,7 @@ import { Download, ExternalLink } from "lucide-react";
 
 export default function Hero(): JSX.Element {
   const handleDownloadCV = () => {
-    const cvUrl = "/CV/lastone.pdf.pdf";
+    const cvUrl = "/CV/FinalCV.pdf";
     const link = document.createElement("a");
     link.href = cvUrl;
     link.download = "AhmedCv.pdf";
