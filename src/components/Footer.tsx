@@ -1,7 +1,26 @@
-import { type JSX } from "react";
+import { useState, type JSX } from "react";
+import { useNavigate } from "react-router-dom";
 import { GitBranchIcon, Link2Icon, Mail, ArrowUp } from "lucide-react";
 
 export default function Footer(): JSX.Element {
+  const navigate = useNavigate();
+  const [clickCount, setClickCount] = useState(0);
+  const [lastClickTime, setLastClickTime] = useState(0);
+
+  const handleCopyrightClick = () => {
+    const now = Date.now();
+    if (now - lastClickTime < 2000) {
+      const newCount = clickCount + 1;
+      setClickCount(newCount);
+      if (newCount >= 5) {
+        navigate("/portal-access-sec-2026");
+        setClickCount(0);
+      }
+    } else {
+      setClickCount(1);
+    }
+    setLastClickTime(now);
+  };
   const currentYear = new Date().getFullYear();
 
   const socialLinks = [
@@ -24,8 +43,10 @@ export default function Footer(): JSX.Element {
 
   const links = [
     { label: "About", href: "#about" },
+    { label: "Projects", href: "#projects" },
     { label: "Experience", href: "#experience" },
     { label: "Skills", href: "#skills" },
+    { label: "Services", href: "#services" },
     { label: "Certifications", href: "#certifications" },
     { label: "Blog", href: "#blog" },
     { label: "Contact", href: "#contact" },
@@ -36,7 +57,7 @@ export default function Footer(): JSX.Element {
   };
 
   return (
-    <footer className="border-brand-teal/20 bg-brand-dark text-brand-cream border-t px-4 py-12 sm:px-6 lg:px-8">
+    <footer className="border-brand-teal/20 bg-[var(--bg-main)] text-[var(--text-main)] border-t px-4 py-12 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="mx-auto max-w-6xl">
         {/* Main Footer Content */}
         <div className="mb-12 grid gap-8 md:grid-cols-4">
@@ -55,7 +76,7 @@ export default function Footer(): JSX.Element {
               Navigation
             </h4>
             <ul className="space-y-2">
-              {links.slice(0, 3).map((link, idx) => (
+              {links.slice(0, 4).map((link, idx) => (
                 <li key={idx}>
                   <a
                     href={link.href}
@@ -72,7 +93,7 @@ export default function Footer(): JSX.Element {
           <div>
             <h4 className="text-brand-teal mb-4 text-lg font-bold">Services</h4>
             <ul className="space-y-2">
-              {links.slice(3).map((link, idx) => (
+              {links.slice(4).map((link, idx) => (
                 <li key={idx}>
                   <a
                     href={link.href}
@@ -112,7 +133,10 @@ export default function Footer(): JSX.Element {
         <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
           {/* Copyright */}
           <div className="text-brand-cream/60 text-center text-sm md:text-left">
-            <p>
+            <p 
+              onClick={handleCopyrightClick}
+              className="cursor-default select-none"
+            >
               © {currentYear} Ahmed Ragab. All rights reserved. | Built with
               React & Tailwind CSS
             </p>

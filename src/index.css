@@ -1,22 +1,51 @@
 @import "tailwindcss";
+@variant dark (&:where(.dark, .dark *));
+@variant light (&:where(.light, .light *));
 
 @theme {
-  /* ألوان الباليتة الجديدة - بأجواء ترابية دافئة */
-  --color-brand-dark: #2c3639; /* الخلفية الأساسية للموقع */
-  --color-brand-blue: #3f4e4f; /* خلفية الكروت والأقسام */
-  --color-brand-teal: #a27b5c; /* الأزرار والأيقونات والحدود */
-  --color-brand-cream: #dcd7c9; /* النصوص والعناوين */
+  /* --- الباليتة الأساسية (الدارك مود هو الافتراضي) --- */
+  --color-brand-dark: #1B262C;  /* خلفية الموقع الأساسية (كحلي عميق) */
+  --color-brand-blue: #0F4C75;  /* خلفية الكروت والأقسام (أزرق بحري غني) */
+  --color-brand-teal: #3282B8;  /* اللون الأساسي للأزرار والحدود */
+  --color-brand-cream: #BBE1FA; /* لون النصوص والعناوين الفاتحة في الدارك */
 
-  /* تحديث الظلال لتتناسب مع الدرجات الجديدة */
-  --shadow-brand: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-  --shadow-brand-sm: 0 5px 15px rgba(0, 0, 0, 0.3);
+  /* --- ألوان إضافية --- */
+  --color-brand-accent: #FF6B6B; /* كورال/برتقالي دافئ لأزرار الـ CTA */
+  --color-brand-purple: #6C5CE7; /* بنفسجي للتدرجات */
+  --color-brand-glow: #00F5D4;   /* نيون منت للتأثيرات المضيئة */
+  --color-brand-light: #F8FAFC;  /* أبيض ثلجي */
+
+  /* الظلال الافتراضية */
+  --shadow-brand: 0 10px 30px -10px rgba(50, 130, 184, 0.25);
+  --shadow-brand-sm: 0 5px 15px rgba(27, 38, 44, 0.6);
 }
 
-/* 1. إعدادات الـ Root والأبعاد */
+/* 1. إعدادات الـ Root (الوضع الافتراضي أصبح Dark Mode دلوقتي) */
 :root {
   line-height: 1.5;
   font-weight: 400;
   color-scheme: dark;
+  --bg-main: var(--color-brand-dark);
+  --text-main: var(--color-brand-cream);
+  --card-bg: var(--color-brand-blue);
+}
+
+/* 2. كلاس اللايت مود (.light) لعكس الألوان بوضوح وراحة للعين */
+.light {
+  color-scheme: light;
+  --bg-main: #F8FAFC;
+  --text-main: #0F172A;
+  --card-bg: #FFFFFF;
+
+  /* قلب متغيرات الألوان عشان أي كلاس في الـ JSX يتحول تلقائي ويطلع شكله مقروء وفخم */
+  --color-brand-dark: #F8FAFC;  /* الخلفيات الغامقة تتحول لأبيض ثلجي ناصع */
+  --color-brand-cream: #0F172A; /* النصوص الفاتحة تتحول لكحلي غامق جداً ومقروء بوضوح */
+  --color-brand-blue: #F1F5F9;  /* الكروت تتحول لرمادي لؤلؤي ناعم يميزها عن الخلفية */
+  --color-brand-teal: #0284C7;  /* درجة أزرق أعمق للأزرار والروابط في الوضع الفاتح */
+  --color-brand-glow: #38BDF8;  /* إضاءة هادئة تتناسب مع الخلفية الفاتحة */
+
+  --shadow-brand: 0 10px 30px -10px rgba(15, 23, 42, 0.15);
+  --shadow-brand-sm: 0 5px 15px rgba(15, 23, 42, 0.08);
 }
 
 #root {
@@ -32,36 +61,38 @@ body {
   place-items: start;
   min-width: 320px;
   min-height: 100vh;
-  background-color: var(--color-brand-dark);
-  color: var(--color-brand-cream);
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* 2. الكلاسات المخصصة للمكونات */
+/* 3. الكلاسات المخصصة للمكونات (تم ضبطها لتشتغل أوتوماتيك مع المودين بدون كلاس dark أو light) */
 @layer components {
   .target {
-    @apply text-brand-dark bg-brand-cream inline-flex items-center gap-2 rounded-md px-8 py-3 font-semibold transition-all duration-300;
-    @apply hover:bg-brand-teal hover:text-brand-dark hover:ring-brand-teal hover:ring hover:outline-none;
-    @apply hover:scale-105 sm:hover:w-60;
+    @apply bg-brand-teal text-white inline-flex items-center gap-2 rounded-md px-8 py-3 font-semibold transition-all duration-300;
+    @apply hover:bg-brand-accent hover:text-white hover:ring-brand-teal hover:ring hover:outline-none;
+    @apply hover:scale-105 sm:hover:w-60 hover:shadow-[0_0_20px_rgba(0,245,212,0.4)];
   }
 
   .section-title {
-    @apply text-brand-cream mb-12 text-center text-4xl font-bold md:text-5xl;
+    @apply text-brand-cream mb-12 text-center text-4xl font-bold md:text-5xl transition-colors duration-300;
   }
 
   .card-luxury {
-    @apply bg-brand-blue hover:shadow-brand border-brand-teal/30 hover:border-brand-teal rounded-xl border p-6 shadow-sm transition-all duration-300;
+    background-color: var(--card-bg);
+    @apply hover:shadow-brand border-brand-teal/20 hover:border-brand-glow rounded-xl border p-6 shadow-sm transition-all duration-300;
   }
 
   .btn-primary {
-    @apply bg-brand-teal text-brand-dark hover:bg-brand-cream rounded-md px-6 py-2 font-semibold transition-all;
+    @apply bg-brand-teal text-white hover:bg-brand-accent rounded-md px-6 py-2 font-semibold transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,107,107,0.5)];
   }
 
   .gradient-text {
-    @apply from-brand-cream to-brand-teal bg-linear-to-r bg-clip-text text-transparent;
+    @apply from-brand-teal via-brand-glow to-brand-purple bg-linear-to-r bg-clip-text text-transparent;
   }
 }
 
-/* 3. الأنيميشن */
+/* 4. الأنيميشن */
 .animate-slide-up {
   opacity: 0;
   transform: translateY(30px);

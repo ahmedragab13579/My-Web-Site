@@ -26,7 +26,7 @@ export default function Certifications(): JSX.Element {
         <h2 className="section-title">Certifications & Achievements</h2>
 
         {/* Filter Buttons */}
-        <div className="animate-slide-up mb-12 flex flex-wrap justify-center gap-3">
+        <div className=" mb-12 flex flex-wrap justify-center gap-3">
           {categories.map((category) => (
             <button
               key={category}
@@ -43,9 +43,9 @@ export default function Certifications(): JSX.Element {
         </div>
 
         {/* Horizontal Scroll Container (Carousel) */}
-        <div className="animate-slide-up relative">
-          <div className="from-brand-dark pointer-events-none absolute top-0 bottom-0 left-0 z-10 w-12 bg-linear-to-r to-transparent"></div>
-          <div className="from-brand-dark pointer-events-none absolute top-0 right-0 bottom-0 z-10 w-12 bg-linear-to-l to-transparent"></div>
+        <div className=" relative">
+          <div className="from-[var(--bg-main)] pointer-events-none absolute top-0 bottom-0 left-0 z-10 w-12 bg-linear-to-r to-transparent"></div>
+          <div className="from-[var(--bg-main)] pointer-events-none absolute top-0 right-0 bottom-0 z-10 w-12 bg-linear-to-l to-transparent"></div>
 
           {/* التعديل هنا: ضفنا كلاسات التوسيط المشروطة بناءً على عدد الكروت */}
           <div
@@ -60,7 +60,7 @@ export default function Certifications(): JSX.Element {
                 key={cert.id}
                 className="card-luxury flex w-[320px] shrink-0 snap-center flex-col overflow-hidden p-0 transition-transform hover:-translate-y-2 md:w-87.5"
               >
-                <div className="border-brand-teal/30 bg-brand-dark/50 relative flex h-48 w-full items-center justify-center border-b">
+                <div className="border-brand-teal/30 bg-[var(--card-bg)] relative flex h-48 w-full items-center justify-center border-b">
                   {cert.imagepath && !imageErrors[cert.id] ? (
                     <img
                       src={cert.imagepath}

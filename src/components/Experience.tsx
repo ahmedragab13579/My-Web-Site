@@ -1,224 +1,100 @@
 import { type JSX } from "react";
-import {
-  DatabaseIcon,
-  MessageSquareIcon,
-  UsersIcon,
-  CheckCircleIcon,
-  GitBranchIconIcon,
-  ExternalLinkIcon,
-} from "./Icons";
+import { useExperiences } from "../BackEndIntegration/Hooks/Queries/useExperiencesQueries";
+import { Calendar, MapPin, Briefcase } from "lucide-react";
 
 export default function Experience(): JSX.Element {
-  const projects = [
-    {
-      title: "E-Commerce Platform",
-      subtitle: "ITI Full Stack Training Project",
-      role: "Backend Developer",
-      description:
-        "A comprehensive e-commerce solution built during ITI training, showcasing advanced backend architecture and microservices patterns.",
-      highlights: [
-        {
-          Icon: DatabaseIcon,
-          title: "Redis Caching",
-          description:
-            "Implemented intelligent caching layer for optimized performance and reduced database load.",
-        },
-        {
-          Icon: MessageSquareIcon,
-          title: "RabbitMQ Integration",
-          description:
-            "Built asynchronous message processing for order management and notification systems.",
-        },
-        {
-          Icon: CheckCircleIcon,
-          title: "API Architecture",
-          description:
-            "Designed RESTful APIs with proper error handling, validation, and scalability patterns.",
-        },
-      ],
-      technologies: [
-        "C#",
-        "ASP.NET Core",
-        "SQL Server",
-        "Redis",
-        "RabbitMQ",
-        "Entity Framework",
-      ],
-      github: "https://github.com/ahmedragab13579/E-Commerce",
-      year: "2025",
-    },
-    {
-      title: "HR Management System",
-      subtitle: "IEEE Beni Suef Project",
-      role: "Backend Committee Member",
-      description:
-        "A robust HR system developed in collaboration with IEEE members, emphasizing quality testing and team collaboration.",
-      highlights: [
-        {
-          Icon: UsersIcon,
-          title: "Team Collaboration",
-          description:
-            "Worked in agile teams with clear communication, code reviews, and knowledge sharing sessions.",
-        },
-        {
-          Icon: MessageSquareIcon,
-          title: "Email Integration",
-          description:
-            "Implemented SMTP-based email notifications for HR events, approvals, and communications.",
-        },
-        {
-          Icon: CheckCircleIcon,
-          title: "Unit Testing",
-          description:
-            "Developed comprehensive test suites ensuring code reliability and system integrity.",
-        },
-      ],
-      technologies: [
-        "C#",
-        "ASP.NET MVC",
-        "SQL Server",
-        "SMTP",
-        "NUnit",
-        "SOLID Principles",
-      ],
-      github: "https://github.com/IEEE-Beni-Suef/hr-system",
-      year: "2026",
-    },
-    {
-      title: "EcoBridge System",
-      subtitle: "IEEE Beni Suef Project",
-      role: "Backend Committee Team Leader",
-      description:
-        "The Project developed in collaboration with IEEE Tunisia FrontEnd Branch, emphasizing quality testing and team collaboration.",
-      highlights: [
-        {
-          Icon: UsersIcon,
-          title: "Leading The Team",
-          description:
-            "Worked in agile teams with clear communication, code reviews, and knowledge sharing sessions.",
-        },
-        {
-          Icon: DatabaseIcon,
-          title: "DataBase Integration",
-          description: "Implemented DataBase Services With Migrations .",
-        },
-        {
-          Icon: CheckCircleIcon,
-          title: "Unit Testing",
-          description:
-            "Developed comprehensive test suites ensuring code reliability and system integrity.",
-        },
-      ],
-      technologies: [
-        "C#",
-        "Clean Architecture",
-        "Monster.Asp",
-        "SQL Server",
-        "NUnit",
-        "SOLID Principles",
-      ],
-      github: "https://github.com/ahmedragab13579/EcoBridge_Project",
-      year: "2026",
-    },
-  ];
+  const { data: experiences = [], isLoading } = useExperiences();
+
+  // Sort experiences: current first, then by start date descending
+  const sortedExperiences = [...experiences].sort((a, b) => {
+    if (a.isCurrent && !b.isCurrent) return -1;
+    if (!a.isCurrent && b.isCurrent) return 1;
+    return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
+  });
+
+  const formatDate = (dateStr: string) => {
+    return new Date(dateStr).toLocaleDateString("en-US", {
+      month: "short",
+      year: "numeric",
+    });
+  };
+
+  if (isLoading) {
+    return (
+      <section id="experience" className="px-4 py-20 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-4xl">
+          <h2 className="section-title">Work & Education Journey</h2>
+          <div className="space-y-8 mt-12">
+            {[1, 2].map((i) => (
+              <div key={i} className="animate-pulse card-luxury flex flex-col p-8 gap-4">
+                <div className="h-6 bg-brand-teal/20 rounded w-1/3"></div>
+                <div className="h-4 bg-brand-teal/10 rounded w-1/4"></div>
+                <div className="h-16 bg-brand-teal/5 rounded w-full"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="experience" className="px-4 py-20 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl">
-        <h2 className="section-title">Featured Projects</h2>
+      <div className="mx-auto max-w-4xl">
+        <h2 className="section-title">Work & Education Journey</h2>
 
-        <div className="grid gap-8 md:grid-cols-3">
-          {projects.map((project) => (
-            <article
-              key={project.title}
-              className="card-luxury flex flex-col p-8"
-            >
-              {/* Header */}
-              <div className="border-brand-teal/30 mb-6 border-b pb-6">
-                <div className="mb-3 flex items-start justify-between">
-                  <div>
-                    <h3 className="text-brand-cream mb-1 text-2xl font-bold">
-                      {project.title}
-                    </h3>
-                    <p className="text-brand-cream/70 mb-2 text-sm">
-                      {project.subtitle}
+        {sortedExperiences.length === 0 ? (
+          <div className="text-center py-12 border border-dashed border-brand-teal/20 rounded-xl bg-brand-blue/5">
+            <p className="text-brand-cream/60">No experiences listed yet.</p>
+          </div>
+        ) : (
+          <div className="relative border-l-2 border-brand-teal/30 ml-4 md:ml-6 space-y-12 py-4">
+            {sortedExperiences.map((exp) => {
+              const startFormatted = formatDate(exp.startDate);
+              const endFormatted = exp.isCurrent ? "Present" : exp.endDate ? formatDate(exp.endDate) : "";
+
+              return (
+                <div key={exp.id} className="relative pl-8 md:pl-10 group">
+                  {/* Timeline bullet */}
+                  <div className="absolute -left-[11px] top-1.5 flex h-5 w-5 items-center justify-center rounded-full border-2 border-brand-teal bg-[var(--bg-main)] text-brand-teal transition-all duration-300 group-hover:bg-brand-teal group-hover:text-brand-dark shadow-[0_0_10px_rgba(0,245,212,0.2)]">
+                    <Briefcase size={10} />
+                  </div>
+
+                  {/* Card Container */}
+                  <div className="card-luxury p-6 md:p-8 hover:-translate-y-1">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-4 border-b border-brand-teal/10 pb-4">
+                      <div>
+                        <h3 className="text-xl font-bold text-brand-cream group-hover:text-brand-teal transition-colors">
+                          {exp.title}
+                        </h3>
+                        <p className="text-brand-teal font-semibold text-md">
+                          {exp.organization}
+                        </p>
+                      </div>
+
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-3 text-xs text-brand-cream/60">
+                        <span className="flex items-center gap-1">
+                          <Calendar size={14} className="text-brand-teal" />
+                          {startFormatted} – {endFormatted}
+                        </span>
+                        {exp.location && (
+                          <span className="flex items-center gap-1">
+                            <MapPin size={14} className="text-brand-teal" />
+                            {exp.location}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <p className="text-brand-cream/80 text-sm leading-relaxed whitespace-pre-wrap">
+                      {exp.description}
                     </p>
                   </div>
-                  <span className="border-brand-teal/30 bg-brand-teal/20 text-brand-teal rounded-full border px-3 py-1 text-xs font-semibold">
-                    {project.year}
-                  </span>
                 </div>
-                <p className="text-brand-cream/90 font-medium">
-                  Role: {project.role}
-                </p>
-              </div>
-
-              {/* Description */}
-              <p className="text-brand-cream/80 mb-6 leading-relaxed">
-                {project.description}
-              </p>
-
-              {/* Highlights */}
-              <div className="mb-8 space-y-4">
-                {project.highlights.map((highlight) => (
-                  <div key={highlight.title} className="flex items-start gap-4">
-                    <div className="mt-1 flex-shrink-0">
-                      <highlight.Icon className="text-brand-teal" size={20} />
-                    </div>
-                    <div>
-                      <p className="text-brand-cream mb-1 font-semibold">
-                        {highlight.title}
-                      </p>
-                      <p className="text-brand-cream/70 text-sm">
-                        {highlight.description}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Technologies */}
-              <div className="mb-6">
-                <p className="text-brand-teal mb-3 text-sm font-semibold">
-                  Tech Stack
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {project.technologies.map((tech, idx) => (
-                    <span
-                      key={idx}
-                      className="border-brand-teal/30 bg-brand-dark/50 text-brand-cream/90 rounded-full border px-3 py-1 text-xs font-medium"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Links */}
-              <div className="border-brand-teal/30 mt-auto flex gap-3 border-t pt-6">
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`View ${project.title} source code on GitHub`}
-                  className="bg-brand-teal text-brand-cream hover:bg-brand-teal/80 flex flex-1 items-center justify-center gap-2 rounded-md px-4 py-3 font-semibold transition-all duration-300"
-                >
-                  <GitBranchIconIcon size={16} />
-                  View Code
-                </a>
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-brand-cream flex flex-1 items-center justify-center gap-2 rounded-md border-2 px-4 py-3 font-semibold transition-all duration-300"
-                >
-                  <ExternalLinkIcon size={16} />
-                  GitHub
-                </a>
-              </div>
-            </article>
-          ))}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </section>
   );

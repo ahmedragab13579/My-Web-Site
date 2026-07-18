@@ -144,7 +144,16 @@ export const certificatesData = [
     imagepath: "/certificathion/Front/images/js.png",
     icon: "🎨",
   },
-
+{
+    id: 155,
+    title: "ٌReact Course",
+    category: "Frontend",
+    pdfLink:
+      "/certificathion/Front/UltimadeReactCourse.pdf",
+    color: "from-blue-600 to-blue-800",
+    imagepath: "/certificathion/Front/images/UltimadeReactCourse.png",
+    icon: "🎨",
+  },
   // AI Certificates
   {
     id: 16,
@@ -407,6 +416,18 @@ export const certificatesData = [
       "/certificathion/FoundationStage/images/certificate-of-completion-for-introduction-to-programming-using-c-level-2.png",
     icon: "💻",
   },
+  {
+    id: 40,
+    title: "How to write your resume",
+    category: "SoftSkills",
+    pdfLink:
+      "/certificathion/SoftSkills/CourseraHowToWriteA_Resume.pdf",
+    color: "from-purple-600 to-purple-800",
+    imagepath:
+      "/certificathion/SoftSkills/Images/CourseraHowToWriteA_Resume.png",
+    icon: "💻",
+  },
+
 ];
 
 export const getCategories = () => {

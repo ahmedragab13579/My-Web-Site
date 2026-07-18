@@ -1,15 +1,42 @@
-import { type JSX } from "react";
-import { Download, ExternalLink } from "lucide-react";
+import { useState, useRef, useEffect, type JSX } from "react";
+import { Download, ExternalLink, Server, Layers, ChevronDown } from "lucide-react";
 
 export default function Hero(): JSX.Element {
-  const handleDownloadCV = () => {
-    const cvUrl = "/CV/FinalCV.pdf";
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleDownload = (cvType: "backend" | "fullstack") => {
+    const fileMap = {
+      backend: {
+        url: "/CV/Ahmed_Ragab_BackEnd_Developer_CV.pdf",
+        name: "Ahmed_Ragab_BackEnd_Developer_CV.pdf",
+      },
+      fullstack: {
+        url: "/CV/Ahmed_Ragab_FullStack_Developer_CV.pdf",
+        name: "Ahmed_Ragab_FullStack_Developer_CV.pdf",
+      },
+    };
+
+    const target = fileMap[cvType];
     const link = document.createElement("a");
-    link.href = cvUrl;
-    link.download = "AhmedCv.pdf";
+    link.href = target.url;
+    link.download = target.name;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    setIsDropdownOpen(false);
   };
 
   return (
@@ -38,19 +65,56 @@ export default function Hero(): JSX.Element {
             </p>
 
             {/* CTA Buttons */}
-            <div className="mb-12 flex flex-col gap-4 sm:flex-row">
-              <button
-                onClick={handleDownloadCV}
-                className="bg-brand-teal text-brand-cream hover:bg-brand-teal/80 flex w-full items-center justify-center gap-2 rounded-md px-8 py-4 font-semibold transition-all duration-300 sm:w-auto"
-              >
-                <Download size={20} />
-                Download CV
-              </button>
+            <div className="mb-12 flex flex-col gap-4 sm:flex-row relative items-start">
+              <div className="relative w-full sm:w-auto" ref={dropdownRef}>
+                <button
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className="bg-brand-teal text-brand-cream hover:bg-brand-teal/90 flex w-full items-center justify-center gap-2 rounded-md px-8 py-4 font-semibold transition-all duration-300 cursor-pointer shadow-[0_0_15px_rgba(0,173,181,0.2)]"
+                >
+                  <Download size={20} />
+                  <span>Download CV</span>
+                  <ChevronDown 
+                    size={16} 
+                    className={`transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} 
+                  />
+                </button>
+
+                {isDropdownOpen && (
+                  <div className="absolute left-0 mt-2 w-72 origin-top-left rounded-xl border border-brand-teal/20 bg-[var(--card-bg)] p-2 shadow-brand backdrop-blur-md transition-all z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <button
+                      onClick={() => handleDownload("backend")}
+                      className="group flex w-full items-center gap-3 rounded-lg p-3 text-left hover:bg-brand-blue/50 transition-all duration-200 cursor-pointer"
+                    >
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-teal/10 text-brand-teal group-hover:bg-brand-teal group-hover:text-brand-dark transition-colors duration-200">
+                        <Server size={20} />
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-brand-cream font-semibold text-sm">Backend Developer CV</div>
+                        <div className="text-brand-cream/60 text-xs mt-0.5">Focused on .NET & Web API</div>
+                      </div>
+                    </button>
+
+                    <button
+                      onClick={() => handleDownload("fullstack")}
+                      className="group flex w-full items-center gap-3 rounded-lg p-3 text-left hover:bg-brand-blue/50 transition-all duration-200 cursor-pointer mt-1"
+                    >
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-purple/10 text-brand-purple group-hover:bg-brand-purple group-hover:text-brand-cream transition-colors duration-200">
+                        <Layers size={20} />
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-brand-cream font-semibold text-sm">Full-Stack Developer CV</div>
+                        <div className="text-brand-cream/60 text-xs mt-0.5">Focused on .NET & React</div>
+                      </div>
+                    </button>
+                  </div>
+                )}
+              </div>
+
               <a
                 href="https://github.com/ahmedragab13579"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-brand-cream flex w-full items-center justify-center gap-2 rounded-md border-2 px-8 py-4 font-semibold transition-all duration-300 sm:w-auto"
+                className="border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-brand-cream flex w-full items-center justify-center gap-2 rounded-md border-2 px-8 py-4 font-semibold transition-all duration-300 sm:w-auto cursor-pointer"
               >
                 <ExternalLink size={20} />
                 View GitHub

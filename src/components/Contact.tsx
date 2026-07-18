@@ -1,5 +1,7 @@
 import React, { useState, type JSX } from "react";
 import { Mail, MapPin, Link2Icon, GitBranchIcon, Send } from "lucide-react";
+import { useSubmitContactMessage } from "../BackEndIntegration/Hooks/Mutations/useContactMutations";
+import { toast } from "react-toastify";
 
 type FormData = {
   name: string;
@@ -14,6 +16,8 @@ export default function Contact(): JSX.Element {
     message: "",
   });
 
+  const submitContactMessage = useSubmitContactMessage();
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -26,11 +30,23 @@ export default function Contact(): JSX.Element {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const subject = encodeURIComponent("Portfolio Contact");
-    const body = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`,
+    submitContactMessage.mutate(
+      {
+        senderName: formData.name,
+        senderEmail: formData.email,
+        subject: "Portfolio Contact Message",
+        content: formData.message,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Your message has been sent successfully!");
+          setFormData({ name: "", email: "", message: "" });
+        },
+        onError: () => {
+          toast.error("Failed to send message. Please try again.");
+        },
+      }
     );
-    window.location.href = `mailto:ahmedharidy2019@gmail.com?subject=${subject}&body=${body}`;
   };
 
   const contactInfo = [
@@ -72,7 +88,7 @@ export default function Contact(): JSX.Element {
         </p>
 
         <div className="grid gap-12 md:grid-cols-2">
-          {/* الجانب الأيسر: معلومات التواصل */}
+          {/* Contact Information Side */}
           <div className="space-y-8">
             <h3 className="text-brand-cream mb-12 text-2xl font-bold">
               Contact Information
@@ -117,12 +133,13 @@ export default function Contact(): JSX.Element {
             </div>
           </div>
 
+          {/* Form Side */}
           <div className="border-brand-teal/30 bg-brand-blue/20 shadow-brand rounded-xl border p-8 backdrop-blur-md">
             <h3 className="text-brand-cream mb-2 text-2xl font-bold">
               Send a Message
             </h3>
             <p className="text-brand-cream/70 mb-6 text-sm">
-              This form will open your email client with a pre-filled message.
+              Send a message directly to my administrative inbox.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-5">
@@ -140,7 +157,7 @@ export default function Contact(): JSX.Element {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="border-brand-teal/30 bg-brand-dark/50 text-brand-cream placeholder-brand-cream/40 focus:border-brand-teal focus:ring-brand-teal w-full rounded-lg border px-4 py-3 transition-all focus:ring-1 focus:outline-none"
+                  className="border-brand-teal/30 bg-[var(--card-bg)] text-brand-cream placeholder-brand-cream/40 focus:border-brand-teal focus:ring-brand-teal w-full rounded-lg border px-4 py-3 transition-all focus:ring-1 focus:outline-none"
                   placeholder="Your name"
                 />
               </div>
@@ -159,7 +176,7 @@ export default function Contact(): JSX.Element {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="border-brand-teal/30 bg-brand-dark/50 text-brand-cream placeholder-brand-cream/40 focus:border-brand-teal focus:ring-brand-teal w-full rounded-lg border px-4 py-3 transition-all focus:ring-1 focus:outline-none"
+                  className="border-brand-teal/30 bg-[var(--card-bg)] text-brand-cream placeholder-brand-cream/40 focus:border-brand-teal focus:ring-brand-teal w-full rounded-lg border px-4 py-3 transition-all focus:ring-1 focus:outline-none"
                   placeholder="your.email@example.com"
                 />
               </div>
@@ -178,17 +195,18 @@ export default function Contact(): JSX.Element {
                   onChange={handleChange}
                   required
                   rows={5}
-                  className="border-brand-teal/30 bg-brand-dark/50 text-brand-cream placeholder-brand-cream/40 focus:border-brand-teal focus:ring-brand-teal w-full resize-none rounded-lg border px-4 py-3 transition-all focus:ring-1 focus:outline-none"
+                  className="border-brand-teal/30 bg-[var(--card-bg)] text-brand-cream placeholder-brand-cream/40 focus:border-brand-teal focus:ring-brand-teal w-full resize-none rounded-lg border px-4 py-3 transition-all focus:ring-1 focus:outline-none"
                   placeholder="Your message here..."
                 ></textarea>
               </div>
 
               <button
                 type="submit"
-                className="bg-brand-teal text-brand-dark hover:bg-brand-cream flex w-full items-center justify-center gap-2 rounded-lg px-6 py-3 font-semibold transition-all duration-300"
+                disabled={submitContactMessage.isPending}
+                className="bg-brand-teal text-brand-dark hover:bg-brand-cream disabled:opacity-50 disabled:cursor-not-allowed flex w-full items-center justify-center gap-2 rounded-lg px-6 py-3 font-semibold transition-all duration-300 cursor-pointer"
               >
                 <Send size={18} />
-                Send Message
+                {submitContactMessage.isPending ? "Sending..." : "Send Message"}
               </button>
 
               <p className="text-brand-cream/60 text-center text-xs">
