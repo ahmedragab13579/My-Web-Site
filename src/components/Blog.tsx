@@ -34,11 +34,11 @@ export default function Blog(): JSX.Element {
       <div className="mx-auto max-w-6xl">
         <h2 className="section-title">Technical Blog</h2>
 
-        <p className="animate-slide-up text-brand-cream/80 mx-auto mb-12 max-w-2xl text-center text-lg">
+        <p className=" text-brand-cream/80 mx-auto mb-12 max-w-2xl text-center text-lg">
           Insights, deep-dives, and tutorials on software architecture and full-stack development.
         </p>
 
-        <div className="animate-slide-up grid gap-8 md:grid-cols-3">
+        <div className=" grid gap-8 md:grid-cols-3">
           {articles.map((article) => {
             const formattedDate = article.publishedAt
               ? new Date(article.publishedAt).toLocaleDateString("en-US", {
