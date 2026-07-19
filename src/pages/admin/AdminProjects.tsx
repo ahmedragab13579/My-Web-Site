@@ -328,6 +328,10 @@ export default function AdminProjects(): JSX.Element {
                     <option value="Freelance">Freelance</option>
                     <option value="Enterprise">Enterprise</option>
                     <option value="OpenSource">OpenSource</option>
+                    <option value="Startup">Startup</option>
+                    <option value="Volunteer">Volunteer</option>
+
+
                   </select>
                 </div>
               </div>

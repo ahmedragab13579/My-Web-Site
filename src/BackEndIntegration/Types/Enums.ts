@@ -10,11 +10,12 @@ export type SkillCategory =
 
 // ==================== Project Type ====================
 export type ProjectType =
-  | 'Personal'
-  | 'Freelance'
-  | 'Enterprise'
-  | 'OpenSource';
-
+  | 'Personal'     // مشاريع التعلم والتجارب البرمجية
+  | 'Startup'      // مشاريعك الشخصية اللي تحولت لمنتج حقيقي وشغال برودكشن (زي شاميلكو)
+  | 'Freelance'    // مشاريع مدفوعة عملتها لعملاء
+  | 'Enterprise'   // مشاريع الشركات اللي اشتغلت فيها كموظف (Full-time / Internship)
+  | 'Volunteer'    // مشاريع الفرق والأنشطة المؤسسية والتطوعية (زي IEEE)
+  | 'OpenSource';  // مساهماتك في المشاريع مفتوحة المصدر للعامة
 // ==================== Message Status ====================
 export type MessageStatus =
   | 'New'
