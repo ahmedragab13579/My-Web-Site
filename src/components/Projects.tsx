@@ -4,7 +4,7 @@ import { GitBranchIconIcon, ExternalLinkIcon } from "./Icons";
 import { Eye, Heart } from "lucide-react";
 
 export default function Projects(): JSX.Element {
-  const { data: pagedResult, isLoading } = useProjects(1, 3, true);
+  const { data: pagedResult, isLoading } = useProjects(1, 100, true);
   const projects = pagedResult?.items || [];
 
   if (isLoading) {
@@ -12,8 +12,8 @@ export default function Projects(): JSX.Element {
       <section id="projects" className="px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-6xl">
           <h2 className="section-title">Featured Projects</h2>
-          <div className="grid gap-8 md:grid-cols-3">
-            {[1, 2, 3].map((i) => (
+          <div className="grid gap-8 md:grid-cols-4">
+            {[1, 2, 3,4].map((i) => (
               <div key={i} className="animate-pulse card-luxury flex flex-col p-8 h-96">
                 <div className="h-6 bg-brand-teal/20 rounded w-2/3 mb-4"></div>
                 <div className="h-4 bg-brand-teal/10 rounded w-1/2 mb-6"></div>
@@ -32,7 +32,7 @@ export default function Projects(): JSX.Element {
       <div className="mx-auto max-w-6xl">
         <h2 className="section-title">Featured Projects</h2>
 
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-1">
           {projects.map((project) => {
             const year = project.createdAt ? new Date(project.createdAt).getFullYear() : "";
             
